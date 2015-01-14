@@ -4,6 +4,8 @@ Created on Tue Jan 13 16:23:04 2015
 
 @author: user
 """
+
+import pymongo
 from pprint import pprint
 
 def get_db():
@@ -16,7 +18,15 @@ def get_db():
 db = get_db()
 dir(db)
 collections = db.collection_names()
-
-for i in db.grades.find():
-    print pprint(i)
-    
+query = {'type':'homework'}
+cursor = db.grades.find(query)
+cursor = cursor.sort([('student_id',pymongo.ASCENDING),('score',pymongo.DESCENDING)])
+sid = ""
+count = 0
+for item in cursor:
+    pprint(item)
+    count += 1
+    print count
+    while sid == "" or sid == item['student_id']:
+        
+    sid = item['student_id']
